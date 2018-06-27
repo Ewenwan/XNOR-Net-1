@@ -2,7 +2,7 @@
 # then another factor of 10 after 10 more epochs (5000 iters)
 # Archieve 0.8221 accuracy after 4w 
 # The train/test net protocol buffer definition
-net: "examples/cifar10_xnor/cifar10_full.proto"
+net: "./cifar10_full.proto"
 # test_iter specifies how many forward passes the test should carry out.
 # In the case of CIFAR10, we have test batch size 100 and 100 test iterations,
 # covering the full 10,000 testing images.
@@ -25,7 +25,7 @@ display: 200
 max_iter:  40000
 # snapshot intermediate results
 snapshot: 10000
-snapshot_prefix: "examples/cifar10_xnor/cifar10_xnor"
+snapshot_prefix: "./cifar10_xnor"
 # solver mode: CPU or GPU
 solver_mode: GPU
-device_id: 0
+# device_id: 0

@@ -17,47 +17,69 @@ We thank @chyojn for the pull request that defined the model schemas and solver 
 
 *This example is a work-in-progress. It would be nice to further explain details of the network and training choices and benchmark the full training.*
 
-Prepare the Dataset
+1、 Prepare the Dataset 准备数据集  CIFAR-10  10类别数据集
 -------------------
 
-You will first need to download and convert the data format from the [CIFAR-10 website](http://www.cs.toronto.edu/~kriz/cifar.html). To do this, simply run the following commands:
+You will first need to download and 
+convert the data format from the [CIFAR-10 website](http://www.cs.toronto.edu/~kriz/cifar.html). 
+To do this, simply run the following commands:
 
     cd $CAFFE_ROOT
-    ./data/cifar10/get_cifar10.sh
-    ./examples/cifar10/create_cifar10.sh
+    ./data/cifar10/get_cifar10.sh         // 下载数据集
+    ./examples/cifar10/create_cifar10.sh  // 转换成caffe需要的 leveldb数据库格式
 
-If it complains that `wget` or `gunzip` are not installed, you need to install them respectively. After running the script there should be the dataset, `./cifar10-leveldb`, and the data set image mean `./mean.binaryproto`.
+If it complains that `wget` or `gunzip` are not installed, y
+ou need to install them respectively. 
+After running the script there should be the dataset,
+ `./cifar10-leveldb`,  leveldb数据库格式 文件
+ and the data set image mean
+ `./mean.binaryproto`. 数据集 图像 各通道均值
 
-The Model
+2、 The Model
 ---------
 
-The CIFAR-10 model is a CNN that composes layers of convolution, pooling, rectified linear unit (ReLU) nonlinearities, and local contrast normalization with a linear classifier on top of it all. We have defined the model in the `CAFFE_ROOT/examples/cifar10` directory's `cifar10_quick_train_test.prototxt`.
+The CIFAR-10 model is a CNN that composes layers of
+卷积 convolution, 池化 pooling, 激活rectified linear unit (ReLU) nonlinearities, 
+线性归一化分类器 and local contrast normalization with a linear classifier on top of it all. 
+We have defined the model in the `CAFFE_ROOT/examples/cifar10` directory's `cifar10_quick_train_test.prototxt`.
 
 Training and Testing the "Quick" Model
 --------------------------------------
+ 3、训练模型  提供网络定义文件 和 训练参数文件
+Training the model is simple after you have 
+written the network definition protobuf and 
+solver protobuf files (refer to [MNIST Tutorial](../examples/mnist.html)). 
+Simply run `train_quick.sh`, 
+or the following command directly:
 
-Training the model is simple after you have written the network definition protobuf and solver protobuf files (refer to [MNIST Tutorial](../examples/mnist.html)). Simply run `train_quick.sh`, or the following command directly:
 
     cd $CAFFE_ROOT
-    ./examples/cifar10/train_quick.sh
+    ./examples/cifar10/train_quick.sh   训练脚本
 
-`train_quick.sh` is a simple script, so have a look inside. The main tool for training is `caffe` with the `train` action, and the solver protobuf text file as its argument.
+`train_quick.sh` is a simple script, so have a look inside.
+ The main tool for training is `caffe` with the `train` action, 
+ and the solver protobuf text file as its argument.
 
 When you run the code, you will see a lot of messages flying by like this:
 
+载入模型文件  显示每一层的输入输出信息
     I0317 21:52:48.945710 2008298256 net.cpp:74] Creating Layer conv1
     I0317 21:52:48.945716 2008298256 net.cpp:84] conv1 <- data
     I0317 21:52:48.945725 2008298256 net.cpp:110] conv1 -> conv1
     I0317 21:52:49.298691 2008298256 net.cpp:125] Top shape: 100 32 32 32 (3276800)
     I0317 21:52:49.298719 2008298256 net.cpp:151] conv1 needs backward computation.
 
-These messages tell you the details about each layer, its connections and its output shape, which may be helpful in debugging. After the initialization, the training will start:
+These messages tell you the details about each layer, 
+its connections and its output shape, which may be helpful in debugging. 
+After the initialization, the training will start:
 
+网络初始化完成
     I0317 21:52:49.309370 2008298256 net.cpp:166] Network initialization done.
     I0317 21:52:49.309376 2008298256 net.cpp:167] Memory required for Data 23790808
     I0317 21:52:49.309422 2008298256 solver.cpp:36] Solver scaffolding done.
     I0317 21:52:49.309447 2008298256 solver.cpp:47] Solving CIFAR10_quick_train
 
+训练记录- loss lr学习率
 Based on the solver setting, we will print the training loss function every 100 iterations, and test the network every 500 iterations. You will see messages like this:
 
     I0317 21:53:12.179772 2008298256 solver.cpp:208] Iteration 100, lr = 0.001
@@ -67,10 +89,15 @@ Based on the solver setting, we will print the training loss function every 100 
     I0317 21:54:47.129461 2008298256 solver.cpp:114] Test score #0: 0.5504
     I0317 21:54:47.129500 2008298256 solver.cpp:114] Test score #1: 1.27805
 
-For each training iteration, `lr` is the learning rate of that iteration, and `loss` is the training function. For the output of the testing phase, **score 0 is the accuracy**, and **score 1 is the testing loss function**.
+For each training iteration, 
+	`lr` is the learning rate of that iteration, 
+	 and `loss` is the training function. 
+For the output of the testing phase, 
+     **score 0 is the accuracy**,
+ and **score 1 is the testing loss function**.
 
 And after making yourself a cup of coffee, you are done!
-
+训练完成：
     I0317 22:12:19.666914 2008298256 solver.cpp:87] Iteration 5000, Testing net
     I0317 22:12:25.580330 2008298256 solver.cpp:114] Test score #0: 0.7533
     I0317 22:12:25.580379 2008298256 solver.cpp:114] Test score #1: 0.739837
@@ -82,9 +109,11 @@ Our model achieved ~75% test accuracy. The model parameters are stored in binary
 
     cifar10_quick_iter_5000
 
-which is ready-to-deploy in CPU or GPU mode! Refer to the `CAFFE_ROOT/examples/cifar10/cifar10_quick.prototxt` for the deployment model definition that can be called on new data.
+which is ready-to-deploy in CPU or GPU mode! 
+Refer to the `CAFFE_ROOT/examples/cifar10/cifar10_quick.prototxt` 
+for the deployment model definition that can be called on new data.
 
-Why train on a GPU?
+Why train on a GPU?  GPU训练
 -------------------
 
 CIFAR-10, while still small, has enough data to make GPU training attractive.

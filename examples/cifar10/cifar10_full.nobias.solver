@@ -23,9 +23,9 @@ lr_policy: "multistep"
 display: 200
 # The maximum number of iterations
 max_iter:  40000
-# snapshot intermediate results
+# 模型保存间隔 snapshot intermediate results
 snapshot: 10000
 snapshot_prefix: "examples/cifar10/cifar10_full_nobias"
 # solver mode: CPU or GPU
-solver_mode: GPU
-device_id: 3
+# solver_mode: GPU
+# device_id: 3

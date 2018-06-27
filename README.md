@@ -17,6 +17,11 @@
   ./data/cifar10/get_cifar10.sh         // 下载数据集
 ```
 
+    下载地址 http://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz
+    解压  tar -xf cifar-10-binary.tar.gz && rm -f cifar-10-binary.tar.gz
+       mv cifar-10-batches-bin/* . && rm -rf cifar-10-batches-bin
+
+
 # 处理数据集 数据集格式转换  
 
 ./examples/cifar10/create_cifar10.sh  // 转换成caffe需要的 leveldb数据库格式

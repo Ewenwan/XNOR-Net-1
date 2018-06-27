@@ -1,5 +1,5 @@
 //
-// This script converts the CIFAR dataset to the leveldb format used
+// 转换 CIFAR dataset 到 leveldb 数据库格式
 // by caffe to perform classification.
 // Usage:
 //    convert_cifar_data input_folder output_db_file
@@ -23,11 +23,12 @@ using boost::scoped_ptr;
 using std::string;
 namespace db = caffe::db;
 
-const int kCIFARSize = 32;
+const int kCIFARSize = 32;// 图像尺寸 32*32
 const int kCIFARImageNBytes = 3072;
 const int kCIFARBatchSize = 10000;
-const int kCIFARTrainBatches = 5;
+const int kCIFARTrainBatches = 5;//批次数量
 
+// 获取标签和数据
 void read_image(std::ifstream* file, int* label, char* buffer) {
   char label_char;
   file->read(&label_char, 1);
@@ -36,6 +37,7 @@ void read_image(std::ifstream* file, int* label, char* buffer) {
   return;
 }
 
+// 转换数据集
 void convert_dataset(const string& input_folder, const string& output_folder,
     const string& db_type) {
   scoped_ptr<db::DB> train_db(db::GetDB(db_type));
@@ -45,10 +47,11 @@ void convert_dataset(const string& input_folder, const string& output_folder,
   int label;
   char str_buffer[kCIFARImageNBytes];
   Datum datum;
-  datum.set_channels(3);
-  datum.set_height(kCIFARSize);
+  datum.set_channels(3);// 3 通道
+  datum.set_height(kCIFARSize);// 图像尺寸
   datum.set_width(kCIFARSize);
-
+  
+// 写训练数据
   LOG(INFO) << "Writing Training data";
   for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
     // Open files
@@ -69,7 +72,8 @@ void convert_dataset(const string& input_folder, const string& output_folder,
   }
   txn->Commit();
   train_db->Close();
-
+  
+// 写测试数据
   LOG(INFO) << "Writing Testing data";
   scoped_ptr<db::DB> test_db(db::GetDB(db_type));
   test_db->Open(output_folder + "/cifar10_test_" + db_type, db::NEW);

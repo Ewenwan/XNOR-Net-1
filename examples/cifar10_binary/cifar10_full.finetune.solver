@@ -1,6 +1,6 @@
 # then another factor of 10 after 10 more epochs (5000 iters)
 # The train/test net protocol buffer definition
-net: "examples/cifar10_binary/cifar10_full.proto"
+net: "./cifar10_full.finetune.proto"
 # test_iter specifies how many forward passes the test should carry out.
 # In the case of CIFAR10, we have test batch size 100 and 100 test iterations,
 # covering the full 10,000 testing images.
@@ -23,7 +23,7 @@ display: 200
 max_iter:  80000
 # snapshot intermediate results
 snapshot: 10000
-snapshot_prefix: "examples/cifar10_binary/cifar10_finetune"
+snapshot_prefix: "./cifar10_finetune"
 # solver mode: CPU or GPU
 solver_mode: GPU
-device_id: 3
+#device_id: 3

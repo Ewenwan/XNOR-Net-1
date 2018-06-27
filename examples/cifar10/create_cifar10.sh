@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 # This script converts the cifar data into leveldb format.
 
-EXAMPLE=examples/cifar10 # 需要存放转换后文件的地址
-DATA=data/cifar10        #源数据集地址
-DBTYPE=lmdb              # 转换后的格式
+EXAMPLE=examples/cifar10         # 需要存放转换后文件的地址
+DATA=data/cifar-10-batches-bin   # 源数据集地址
+DBTYPE=lmdb                      # 转换后的格式
 
 echo "Creating $DBTYPE..."
 # 删除原来的
